@@ -6,6 +6,7 @@ int[] tool = new int[3];
 tool[0] = new cropScale();
 tool[1] = new vEllipse();
 tool[2] = new vRect();
+tool[3] = new alphaSelection();
 
 // Base class
 
@@ -217,4 +218,30 @@ class vRect extends draww_tool {
 		}
 	}
 }
+
+
+///////////////////////////////////////////////////////////
+// Make Selection Colour Transparent
+///////////////////////////////////////////////////////////
+
+class alphaSelection extends draww_tool {
+	float tolerance = 0.1;
+	void init() {
+	}
+	void draw() {
+		if(mousePressed) {
+		        int target_colour = -canv_image.get(mouseX, mouseY);
+			for (int x = 0; x < canv_image.width; x++) {
+				for (int y = 0; y < canv_image.height; y++) {
+					int cell_colour = -canv_image.get(x,y);
+					if(cell_colour > (target_colour * (1 - tolerance)) && cell_colour < (target_colour * (1 + tolerance)) ) {
+						canv_image.set(x,y, color(255,255,255,255));
+					}
+				}
+			}
+			image(canv_image, 0, 0);
+		}
+	}
+}
+
 
